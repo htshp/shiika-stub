@@ -1,0 +1,30 @@
+{
+  "name": "shiika-stub",
+  "version": "0.0.1",
+  "description": "Simple stub api server.",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/htshp/shiika-stub.git"
+  },
+  "keywords": [
+    "stub",
+    "api",
+    "server",
+    "mock",
+    "shiika"
+  ],
+  "author": "htshp",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/htshp/shiika-stub/issues"
+  },
+  "homepage": "https://github.com/htshp/shiika-stub#readme",
+  "devDependencies": {
+    "@types/node": "^8.0.24",
+    "typescript": "^2.4.2"
+  }
+}
