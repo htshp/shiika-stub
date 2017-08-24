@@ -4,7 +4,11 @@
   "description": "Simple stub api server.",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run lint && npm run _tsbuild",
+    "test": "npm run lint && npm run _mocha",
+    "lint": "tslint ./{src,test}/**/*.ts",
+    "_mocha": "mocha --compilers ts:espower-typescript/guess test/**/*.ts",
+    "_tsbuild": "tsc --project ./src/"
   },
   "repository": {
     "type": "git",
@@ -24,7 +28,13 @@
   },
   "homepage": "https://github.com/htshp/shiika-stub#readme",
   "devDependencies": {
+    "@types/mocha": "^2.2.42",
     "@types/node": "^8.0.24",
+    "espower-typescript": "^8.1.0",
+    "mocha": "^3.5.0",
+    "power-assert": "^1.4.4",
+    "tslint": "^5.6.0",
+    "tslint-config-airbnb": "^5.2.1",
     "typescript": "^2.4.2"
   }
 }

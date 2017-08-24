@@ -4,55 +4,55 @@ import * as http from 'http';
 import * as net from 'net';
 import { isString, isHttpMethod, getFirstPath } from './util';
 
-export interface ServerOption{
-    port?: number;
-    proxy?: string;
+export interface ServerOption {
+  port?: number;
+  proxy?: string;
 }
 
 const DEFAULT_OPTION: ServerOption = {
-    port: 3000,
-    proxy: undefined
+  port: 3000,
+  proxy: undefined,
 };
 
 export class Server {
-    private server: net.Server;
+  private server: net.Server;
 
-    constructor(){}
+  constructor() { }
 
-    start( stub: Stub, option?: ServerOption ){
-        this.server = http.createServer((req, res)=>{
-            
-        }).listen( option ? option.port : 3000 );
-    }
+  start(stub: Stub, option?: ServerOption) {
+    this.server = http.createServer((req, res) => {
 
-    stop(){
-        this.server.close();
-    }
+    }).listen(option ? option.port : 3000);
+  }
 
-    private findStubResponse( path: string, stub: Stub ): StubResponse{
-        const firstPath = getFirstPath(path);
+  stop() {
+    this.server.close();
+  }
 
-        for(const stubPath of Object.keys(stub)){
-            // HTTPメソッド名は弾く
-            if( isHttpMethod(stubPath) ) continue;
+  private findStubResponse(path: string, stub: Stub): StubResponse {
+    const firstPath = getFirstPath(path);
 
-            // 文字列型なら完全一致 or :id
-            if( isString(stubPath) ){
-                if(stubPath[0] === ':'){
-                    // any match
-                    
-                }else{
-                    // perfect match
-                    if( firstPath === stubPath ){
-                        return this.findStubResponse( 
-                            path.split('/').slice(1).join(), 
-                            stub[stubPath] );
-                    }
-                }
-            }
-            
-            // 文字列型以外ならエラーを吐く。
-            throw 'スタブのパス名に文字列型以外が混じっている。';
+    for (const stubPath of Object.keys(stub)) {
+      // HTTPメソッド名は弾く
+      if (isHttpMethod(stubPath)) continue;
+
+      // 文字列型なら完全一致 or :id
+      if (isString(stubPath)) {
+        if (stubPath[0] === ':') {
+          // any match
+
+        } else {
+          // perfect match
+          if (firstPath === stubPath) {
+            return this.findStubResponse(
+              path.split('/').slice(1).join(),
+              stub[stubPath]);
+          }
         }
+      }
+
+      // 文字列型以外ならエラーを吐く。
+      throw 'スタブのパス名に文字列型以外が混じっている。';
     }
+  }
 }
