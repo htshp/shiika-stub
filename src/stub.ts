@@ -1,11 +1,11 @@
-export type Body = any;
+export type ResponseBody = any;
 
 export interface Stub {
-    [ path: string ]: Stub;
-    GET:    Body | Action;
-    POST:   Body | Action;
-    PUT:    Body | Action;
-    Delete: Body | Action;
+    [path: string]: Stub;
+    GET: StubResponse;
+    POST: StubResponse;
+    PUT: StubResponse;
+    Delete: StubResponse;
 }
 
 export interface Request {
@@ -17,10 +17,12 @@ export interface Request {
     body: string; // リクエストのbodyはstring型固定
 }
 
-export interface Response {
+export type Response = ResponseBody | {
     status: number;
-    body: Body;
+    body: ResponseBody;
     headers: { [headerName: string]: string };
-}
+};
 
-export type Action = (req: Request) => Response | Body;
+export type Action = (req: Request) => Response;
+
+export type StubResponse = Action | Response;

@@ -1,7 +1,8 @@
 import { ServerOption } from './server';
-import { Stub } from './stub';
+import { Stub, StubResponse } from './stub';
 import * as http from 'http';
 import * as net from 'net';
+import { isString, isHttpMethod, getFirstPath } from './util';
 
 export interface ServerOption{
     port?: number;
@@ -28,24 +29,30 @@ export class Server {
         this.server.close();
     }
 
-    private analyzeStub( stub: Stub, path: string, reqPath: string ){
-        for(const key of Object.keys(stub)){
-            // method
-            switch(key){
-                case 'GET':
-                    break;
-                case 'POST':
-                    break;
-                case 'PUT':
-                    break;
-                case 'DELETE':
-                    break;
-                default:
-                    break;
+    private findStubResponse( path: string, stub: Stub ): StubResponse{
+        const firstPath = getFirstPath(path);
+
+        for(const stubPath of Object.keys(stub)){
+            // HTTPメソッド名は弾く
+            if( isHttpMethod(stubPath) ) continue;
+
+            // 文字列型なら完全一致 or :id
+            if( isString(stubPath) ){
+                if(stubPath[0] === ':'){
+                    // any match
+                    
+                }else{
+                    // perfect match
+                    if( firstPath === stubPath ){
+                        return this.findStubResponse( 
+                            path.split('/').slice(1).join(), 
+                            stub[stubPath] );
+                    }
+                }
             }
-
-            // path
-
+            
+            // 文字列型以外ならエラーを吐く。
+            throw 'スタブのパス名に文字列型以外が混じっている。';
         }
     }
 }
