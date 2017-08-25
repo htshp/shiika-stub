@@ -4,11 +4,11 @@
   "description": "Simple stub api server.",
   "main": "./lib/index.js",
   "scripts": {
-    "build": "npm run lint && npm run _tsbuild",
-    "test": "npm run lint && npm run _mocha",
-    "lint": "tslint ./{src,test}/**/*.ts",
-    "_mocha": "mocha --compilers ts:espower-typescript/guess test/**/*.ts",
-    "_tsbuild": "tsc --project ./src/"
+    "build": "npm run _tslint && npm run _tsbuild",
+    "test": "npm run _tslint && npm run _mocha",
+    "_tslint": "tslint ./{src,test}/**/*.ts",
+    "_tsbuild": "tsc --project ./src/",
+    "_mocha": "mocha --compilers ts:espower-typescript/guess test/**/*.ts"
   },
   "repository": {
     "type": "git",
