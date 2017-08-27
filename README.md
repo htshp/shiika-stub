@@ -11,7 +11,7 @@ $ npm i siika-stub
 ```
 
 ```js
-// stub.js
+// script.js
 var ss = require('siika-stub');
 
 var server = new ss.Server();
@@ -37,7 +37,7 @@ var stub = {
 server.start( stub, { port: 3000 });
 ```
 
-and you run the script - `node stub.js`
+and you run the script - `node script.js`
 
 You can access...
 http://localhost:3000/api/v2/users

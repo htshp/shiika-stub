@@ -1,51 +1,41 @@
 import * as url from 'url';
 
-// siika-stubがHTTPメソッドとして扱う文字列
+// Strings handled by siika-stub as HTTP method.
 const HTTP_METHOD_NAMES = ['GET', 'POST', 'PUT', 'DELETE'];
 
 /**
- * 指定した文字列がHTTPメソッドか判定する。
- * @param s 判定対象の文字列
+ * Check whether the specified string is an HTTP method.
+ * @param s String to be checked.
  */
 export function isHttpMethod(s: string): boolean {
-    return HTTP_METHOD_NAMES.indexOf(s) >= 0;
+  return HTTP_METHOD_NAMES.indexOf(s) >= 0;
 }
 
 /**
- * 指定した値の方が文字列か判定する。
- * @param value 判定対象の値
+ * The specified value is determined to be of type string.
+ * @param value Value to be checked.
  */
 export function isString(value: any): boolean {
-    return typeof (value) === 'string' // string型か？
-        || value instanceof String; // String型(Objectとしてラップされたstring型)か？
+  // Is it type 'string' or type 'String'?
+  return typeof (value) === 'string' || value instanceof String;
 }
 
 /**
- * URLのパス部分を個々のパスとクエリに分割する。
- * @param path 分割対象のパス
+ * Divide the path into individual paths and queries.
+ * @param pathPath To be split.
  */
 export function splitPath(path: string): {
-    path: string[],
-    query: { [queryName: string]: string }
+  path: string[],
+  query: { [queryName: string]: string; },
 } {
-    // パス部分とクエリ部分に分割する。
-    const { pathname, query } = url.parse(path, true);
+  const { pathname, query } = url.parse(path, true);
 
-    return {
-        path: pathname ? pathname.split('/') : [],
-        query: query
-    };
-}
+  const pathArray = pathname
+    ? pathname.split('/').filter(x => x !== '') // Remove empty string.
+    : [];
 
-/**
- * '/' で区切られたパスから先頭のパスを取り出す。
- * @param path 
- */
-// @internal
-export function getFirstPath(path: string): string | null {
-    // TODO: クエリを消す
-    const paths = path.split('/');
-    if (paths.length < 1) return null;
-
-    return paths[0];
+  return {
+    query,
+    path: pathArray,
+  };
 }
