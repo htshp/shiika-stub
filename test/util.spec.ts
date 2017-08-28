@@ -35,7 +35,10 @@ describe('util.spec.ts - isString', () => {
 
 describe('util.spec.ts - splitPath', () => {
   it('Normal test', () => {
+    // empty
     assert.deepEqual(splitPath(''), { path: [], query: {} });
+
+    // with query
     assert.deepEqual(splitPath('/api/v2/users?name=taro&age=24&items=100&items=200'), {
       path: ['api', 'v2', 'users'],
       query: {
@@ -43,6 +46,12 @@ describe('util.spec.ts - splitPath', () => {
         age: '24',
         items: ['100', '200'],
       },
+    });
+
+    // with domain
+    assert.deepEqual(splitPath('http://test.example/test'), {
+      path: ['test'],
+      query: {}
     });
   });
 });

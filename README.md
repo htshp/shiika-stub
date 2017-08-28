@@ -14,7 +14,7 @@ $ npm i siika-stub
 // script.js
 var ss = require('siika-stub');
 
-var server = new ss.Server();
+var server = new ss.SiikaStub();
 
 var stub = {
     'api/v2': {
