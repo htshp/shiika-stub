@@ -4,7 +4,39 @@ import { Stub, StubResponse } from './stub';
 import { ServerOption } from './server';
 import { splitPath, isHttpMethod, isString } from './util';
 
-function
+export function findStubResponse(path: string[], stub: Stub, method: string): {
+  params: { [paramName: string]: string },
+  res: StubResponse
+} {
+  // returnstub responce ifpath is empty
+  if (path.length === 0) { return { params: {}, res: stub[method] }; }
+
+  const firstPath = path[0];
+  for (const stubPath of Object.keys(stub)) {
+    // ignore if stub is http method
+    if (isHttpMethod(stubPath)) continue;
+
+    // if stubPath type is string
+    if (isString(stubPath)) {
+      if (stubPath[0] === ':') {
+        // any match
+        const res = findStubResponse(path, stub[stubPath], method);
+        res.params[stubPath.slice(1)] = firstPath;
+        return res;
+      } else {
+        // perfect match
+        if (firstPath === stubPath) {
+          return this.findStubResponse(
+            path.split('/').slice(1).join(),
+            stub[stubPath]);
+        }
+      }
+    }
+
+    // error stubPath type is out of domain
+    throw 'stubPath type is out of domamin';
+  }
+}
 
 export class SiikaStub {
   private server: net.Server | null = null;
@@ -29,31 +61,6 @@ export class SiikaStub {
     if (this.server) {
       this.server.close();
       this.server = null;
-    }
-  }
-
-  private findStubResponse(path: string[], stub: Stub): StubResponse {
-    for (const stubPath of Object.keys(stub)) {
-      // ignore if stub is http method
-      if (isHttpMethod(stubPath)) continue;
-
-      // 文字列型なら完全一致 or :id
-      if (isString(stubPath)) {
-        if (stubPath[0] === ':') {
-          // any match
-
-        } else {
-          // perfect match
-          if (firstPath === stubPath) {
-            return this.findStubResponse(
-              path.split('/').slice(1).join(),
-              stub[stubPath]);
-          }
-        }
-      }
-
-      // 文字列型以外ならエラーを吐く。
-      throw 'スタブのパス名に文字列型以外が混じっている。';
     }
   }
 }
