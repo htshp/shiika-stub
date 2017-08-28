@@ -1,42 +1,18 @@
 import * as net from 'net';
 import * as http from 'http';
-import { Stub, StubResponse } from './stub';
-import { ServerOption } from './server';
-import { splitPath, isHttpMethod, isString } from './util';
+import { Stub } from './stub';
+import { splitPath } from './util';
+import { findStubResponse } from './find-stub-response';
 
-export function findStubResponse(path: string[], stub: Stub, method: string): {
-  params: { [paramName: string]: string },
-  res: StubResponse
-} {
-  // returnstub responce ifpath is empty
-  if (path.length === 0) { return { params: {}, res: stub[method] }; }
-
-  const firstPath = path[0];
-  for (const stubPath of Object.keys(stub)) {
-    // ignore if stub is http method
-    if (isHttpMethod(stubPath)) continue;
-
-    // if stubPath type is string
-    if (isString(stubPath)) {
-      if (stubPath[0] === ':') {
-        // any match
-        const res = findStubResponse(path, stub[stubPath], method);
-        res.params[stubPath.slice(1)] = firstPath;
-        return res;
-      } else {
-        // perfect match
-        if (firstPath === stubPath) {
-          return this.findStubResponse(
-            path.split('/').slice(1).join(),
-            stub[stubPath]);
-        }
-      }
-    }
-
-    // error stubPath type is out of domain
-    throw 'stubPath type is out of domamin';
-  }
+export interface ServerOption {
+  port?: number;
+  proxy?: string;
 }
+
+const DEFAULT_OPTION: ServerOption = {
+  port: 3000,
+  proxy: undefined,
+};
 
 export class SiikaStub {
   private server: net.Server | null = null;
@@ -52,8 +28,17 @@ export class SiikaStub {
     // Start server.
     this.server = http.createServer((req, res) => {
       if (!req.url) { throw 'req.url is empty'; }
+      if (!req.method) { throw 'req.method is empty'; }
 
       const { path, query } = splitPath(req.url);
+
+      const stubResponse = findStubResponse(path, stub, req.method);
+
+      if (typeof stubResponse === 'function') {
+
+      } else {
+
+      }
     }).listen(option ? option.port : 3000);
   }
 

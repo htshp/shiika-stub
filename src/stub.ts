@@ -14,7 +14,7 @@ export interface Request {
   headers: { [headerName: string]: string };
   query: { [queryName: string]: string };
   params: { [paramName: string]: string };
-  body: string; // リクエストのbodyはstring型固定
+  body: string;
 }
 
 export type Response = ResponseBody | {

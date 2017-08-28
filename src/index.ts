@@ -1,1 +1,3 @@
-export { Server } from './server';
+import { SiikaStub } from './siika-stub';
+
+export { SiikaStub };

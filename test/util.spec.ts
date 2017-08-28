@@ -1,6 +1,6 @@
 // test/test.ts
 import * as assert from 'assert';
-import { isHttpMethod, isString, splitPath } from '../src/util';
+import { isHttpMethod, isString, splitPath, isFunction } from '../src/util';
 
 describe('util.spec.ts - isHttpMethod', () => {
   it('Normal test', () => {
@@ -30,6 +30,7 @@ describe('util.spec.ts - isString', () => {
     assert.ok(!isString(true));
     assert.ok(!isString({}));
     assert.ok(!isString([]));
+    assert.ok(!isString(() => { }));
   });
 });
 
@@ -51,7 +52,25 @@ describe('util.spec.ts - splitPath', () => {
     // with domain
     assert.deepEqual(splitPath('http://test.example/test'), {
       path: ['test'],
-      query: {}
+      query: {},
     });
+  });
+});
+
+describe('util.spec.ts - isFunction', () => {
+  it('Normal test', () => {
+    assert.ok(isFunction(() => { }));
+  });
+  it('Abnormal test', () => {
+    assert.ok(!isFunction(null));
+    assert.ok(!isFunction(undefined));
+    assert.ok(!isFunction(0));
+    assert.ok(!isFunction(0.0));
+    assert.ok(!isFunction(/abc/));
+    assert.ok(!isFunction(true));
+    assert.ok(!isFunction({}));
+    assert.ok(!isFunction([]));
+    assert.ok(!isFunction(''));
+    assert.ok(!isFunction(String()));
   });
 });

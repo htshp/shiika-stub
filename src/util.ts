@@ -39,3 +39,13 @@ export function splitPath(path: string): {
     path: pathArray,
   };
 }
+
+/**
+ * The specified value is determined to be of type function.
+ * @param value Value to be checked.
+ */
+export function isFunction(value: any): boolean {
+  // Is it type 'function'?
+  return typeof (value) === 'function';
+}
+
