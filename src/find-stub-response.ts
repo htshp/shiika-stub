@@ -13,7 +13,7 @@ export function findStubResponse(path: string[], stub: Stub, method: string, roo
   if (path.length === 0) { return { params: {}, res: stub[method] }; }
 
   // if ommit rootStub, rootStub is stub
-  if (rootStub) { rootStub = stub; }
+  const rootStub2 = rootStub || stub;
 
   const firstPath = path[0];
   for (const stubPath of Object.keys(stub)) {
@@ -41,7 +41,7 @@ export function findStubResponse(path: string[], stub: Stub, method: string, roo
     }
 
     // error stubPath type is out of domain
-    throw new SiikaStubError('stubPath type is out of domamin');
+    throw new SiikaStubError('X はパスとして使用できない値です。');
   }
 
   return null;
