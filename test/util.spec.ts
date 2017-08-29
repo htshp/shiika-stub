@@ -1,4 +1,3 @@
-// test/test.ts
 import * as assert from 'assert';
 import { isHttpMethod, isString, splitPath, isFunction } from '../src/util';
 

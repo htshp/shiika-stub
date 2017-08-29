@@ -1,3 +1,4 @@
+import { SiikaStubError } from './siika-stub-error';
 import { Stub, StubResponse } from './stub';
 import { isHttpMethod, isString } from './util';
 
@@ -6,10 +7,13 @@ export interface StubResponseWithParams {
   res: StubResponse;
 }
 
-export function findStubResponse(path: string[], stub: Stub, method: string)
+export function findStubResponse(path: string[], stub: Stub, method: string, rootStub?: Stub)
   : StubResponseWithParams | null {
   // returnstub responce ifpath is empty
   if (path.length === 0) { return { params: {}, res: stub[method] }; }
+
+  // if ommit rootStub, rootStub is stub
+  if (rootStub) { rootStub = stub; }
 
   const firstPath = path[0];
   for (const stubPath of Object.keys(stub)) {
@@ -37,7 +41,7 @@ export function findStubResponse(path: string[], stub: Stub, method: string)
     }
 
     // error stubPath type is out of domain
-    throw 'stubPath type is out of domamin';
+    throw new SiikaStubError('stubPath type is out of domamin');
   }
 
   return null;
