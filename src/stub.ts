@@ -4,11 +4,7 @@ import { isHttpMethod } from './util';
 export type ResponseBody = any;
 
 export interface Stub {
-  [path: string]: Stub;
-  GET: StubResponse;
-  POST: StubResponse;
-  PUT: StubResponse;
-  Delete: StubResponse;
+  [path: string]: Stub | StubResponse;
 }
 
 export interface Request {
@@ -44,7 +40,24 @@ export function makeParentsTraceable(stub: Stub, parent: Stub | null = null): vo
 
   for (const key of Object.keys(stub)) {
     if (isHttpMethod(key)) { continue; } // HTTPメソッド名のプロパティにはスルーする。
+    if (key === PARENT_PROPERTY_KEY) { continue; }
 
     makeParentsTraceable(stub[key], stub); // 小スタブを対象に再帰的に関数を呼び出す。
   }
+}
+
+export function getStubPathFromRoot(stub: Stub): string[] {
+  const parent = stub[PARENT_PROPERTY_KEY];
+  if (parent == null) { return []; }
+  const parentKey = Object.keys(parent)
+    .filter(parentKey => parent[parentKey] === stub)[0]
+    .replace(/^\/|\/$/g, '');
+  return getStubPathFromRoot(parent).concat(parentKey);
+}
+
+export function createStubDebugText(stub: Stub):string {
+  const path = getStubPathFromRoot(stub);
+  const head = '/' + path.slice(0, -2).join('/') + '/';
+  const tail = path[path.length - 1];
+  return head + tail + '\n' + ' '.repeat(head.length) + '~'.repeat(tail.length);
 }

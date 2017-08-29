@@ -11,5 +11,3 @@ describe('siika-stub-error.spec.ts - SiikaStubError', () => {
     );
   });
 });
-
-throw new InvalidPathError({ a: 100, b: 200 });

@@ -41,7 +41,7 @@ export function findStubResponse(path: string[], stub: Stub, method: string, roo
     }
 
     // error stubPath type is out of domain
-    throw new SiikaStubError('X はパスとして使用できない値です。');
+    throw 100;// SiikaStubError('X はパスとして使用できない値です。');
   }
 
   return null;
