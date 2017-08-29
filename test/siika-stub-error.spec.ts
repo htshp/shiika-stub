@@ -8,6 +8,7 @@ describe('siika-stub-error.spec.ts - SiikaStubError', () => {
         throw new SiikaStubError('OMG!!');
       },
       SiikaStubError,
+      'SiikaStubError',
     );
   });
 });

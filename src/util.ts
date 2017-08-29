@@ -48,4 +48,3 @@ export function isFunction(value: any): boolean {
   // Is it type 'function'?
   return typeof (value) === 'function';
 }
-
